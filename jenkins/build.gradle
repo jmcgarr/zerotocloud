@@ -22,4 +22,7 @@ ospackage {
     }
 
     preInstall('sudo rm -rf /var/lib/tomcat7/webapps/ROOT')
+    preInstall('sudo mkdir /opt/jenkins')
+    preInstall('sudo chmod 777 /opt/jenkins')
+    postInstall('echo "export CATALINA_OPTS=\\"\\$CATALINA_OPTS -DJENKINS_HOME=/opt/jenkins\\"" >> /usr/share/tomcat7/bin/setenv.sh')
 }
