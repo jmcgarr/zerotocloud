@@ -1,15 +1,8 @@
 buildscript {
     repositories { jcenter() }
-    //dependencies {
-    //	classpath 'de.undercouch:gradle-download-task:1.0'
-    //}
 }
 
 apply plugin: 'war'
-//plugins {
-//  id 'war'
-//  id 'nebula.ospackage' version '3.4.0'
-//}
 
 import de.undercouch.gradle.tasks.download.Download
 task download(type: Download) {
@@ -18,17 +11,13 @@ task download(type: Download) {
     dest new File(buildDir, 'jenkins.war')
 }
 
-war {
-    dependsOn(download)
-    from(download)
-}
-
 ospackage {
     requires('default-jdk')
     requires('tomcat7')
 
-	from(war) {
+	from(buildDir) {
         into('/var/lib/tomcat7/webapps/')
+        include '*.war'
         rename(/.*/, 'ROOT.war')
     }
 
