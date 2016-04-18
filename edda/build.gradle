@@ -19,7 +19,7 @@ task patchRepo {
 task buildRepo(type: Build) {
     dependsOn 'cloneRepo', 'patchRepo'
     moduleDir = cloneRepo.gitDir
-    arguments = ['build', '-x', 'check', '-x', 'scaladocJar', '-x', 'sourcesJar', '-x', 'javadocJar', '--stacktrace']
+    arguments = ['build', '-x', 'check', '-x', 'scaladocJar', '-x', 'sourceJar', '-x', 'javadocJar', '--stacktrace']
 }
 
 ospackage {
