@@ -12,17 +12,33 @@ task download(type: Download) {
 }
 
 ospackage {
+    preInstall('sudo rm -rf /var/lib/tomcat7/webapps/ROOT')
+    preInstall('sudo mkdir /opt/jenkins')
+    preInstall('sudo chmod 777 /opt/jenkins')
+    //preInstall('sudo apt-add-repository ppa:brightbox/ruby-ng')
+
     requires('default-jdk')
     requires('tomcat7')
+    requires('git')
+
+    // This is needed for spinnaker's local yum repo setup
+    //requires('software-properties-common')
+    //requires('ruby2.2')
+    //requires('ruby2.2-dev')
+    //requires('zlib1g-dev')
+    //requires('libxml2')
+    
+    // This is needed to run aminator from Jenkins
+    requires('python-pip')
+    requires('python-dev')
 
 	from(buildDir) {
         into('/var/lib/tomcat7/webapps/')
         include '*.war'
         rename(/.*/, 'ROOT.war')
     }
-
-    preInstall('sudo rm -rf /var/lib/tomcat7/webapps/ROOT')
-    preInstall('sudo mkdir /opt/jenkins')
-    preInstall('sudo chmod 777 /opt/jenkins')
     postInstall('echo "export CATALINA_OPTS=\\"\\$CATALINA_OPTS -DJENKINS_HOME=/opt/jenkins\\"" >> /usr/share/tomcat7/bin/setenv.sh')
+    postInstall('sudo gem install bundler')
+    postInstall('sudo gem install deb-s3')
+    postInstall('sudo pip install git+https://github.com/Netflix/aminator.git@2.1.77-dev#egg=aminator')
 }

@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.network "forwarded_port", guest: 8080, host: 8081
+  config.vm.provision "shell", inline: <<-SHELL
+  	sudo apt-add-repository -y ppa:brightbox/ruby-ng
+    sudo apt-get update
+    sudo apt-get -y install default-jdk 
+    sudo apt-get -y install tomcat7 
+    #sudo apt-get -y install software-properties-common
+    #sudo apt-get -y install ruby2.2
+    #sudo apt-get -y install ruby2.2-dev
+    #sudo apt-get -y install zlib1g-dev
+    #sudo dpkg -i /vagrant/build/distributions/jenkins_1.0.0_all.deb
+  SHELL
+end
